@@ -1,10 +1,10 @@
 import os
-
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from common.log_utils import log_pri
 from common.base_page import BasePage
 from common.element_data_utils import ElementDataUtils
+from common.browser import Browser
 
 
 class LoginPage(BasePage):
@@ -35,9 +35,7 @@ class LoginPage(BasePage):
 
 
 if __name__ == '__main__':
-    current_path = os.path.dirname(__file__)
-    chrome_driver_path = os.path.join(current_path, '../webdriver/chromedriver.exe')
-    driver=webdriver.Chrome(executable_path=chrome_driver_path)
+    driver= Browser().get_driver()
     login_page = LoginPage(driver)
     login_page.set_maxwindow()
     login_page.open_url('http://127.0.0.1/zentao/user-login.html?tid=mdjkhgvq')
