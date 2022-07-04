@@ -4,20 +4,15 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from common.log_utils import log_pri
 from common.base_page import BasePage
+from common.element_data_utils import ElementDataUtils
 
 
 class LoginPage(BasePage):
     def __init__(self,driver):
         super(LoginPage, self).__init__(driver)
-        self.username_inputbox = {'element_name': '用户名输入框', 'locator_type': 'xpath',
-                                  'locator_value': '//input[@name="account"]',
-                                  'timeout': 5}
-        self.password_inputbox = {'element_name': '密码输入框', 'locator_type': 'xpath',
-                                  'locator_value': '//input[@name="password"]',
-                                  'timeout': 5}
-        self.login_button = {'element_name': '登录按钮', 'locator_type': 'xpath',
-                             'locator_value': '//button[@class="btn btn-primary" and @type="submit"]',
-                             'timeout': 2}
+        self.username_inputbox = ElementDataUtils('login_page').get_element_info('username_inputbox')
+        self.password_inputbox = ElementDataUtils('login_page').get_element_info('password_inputbox')
+        self.login_button = ElementDataUtils('login_page').get_element_info('login_button')
 
     def input_username(self, username):  # 方法--> 控件的操作
         # self.driver.find_element(By.XPATH,self.username_inputbox['locator_value'])
@@ -49,4 +44,5 @@ if __name__ == '__main__':
     login_page.input_username('test01')
     login_page.input_password('Aa2128199')
     login_page.click_login()
+    # print(login_page.get_element_info('username_inputbox'))
     # login_page.clik_forgetpassword_link()

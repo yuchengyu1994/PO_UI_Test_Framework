@@ -6,7 +6,6 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from common.log_utils import log_pri
 
-
 class BasePage:
     def __init__(self, driver):
         self.driver =  driver # webdriver.Chrome()
@@ -51,14 +50,18 @@ class BasePage:
         #     .until(lambda x:x.find_element(locator_type,locator_value_info))
         element = WebDriverWait(self.driver, locator_time).\
             until(EC.presence_of_element_located((locator_type,locator_value_info)))
+        log_pri.info('%s元素识别成功'%element_info['element_name'])
         return element
 
     def click(self,element_info):
         element=self.find_element(element_info)
         element.click()
-        log_pri.info('对%s 进行了点击'%element_info['element_name'])
+        log_pri.info('对%s进行了点击'%element_info['element_name'])
 
     def input(self,element_info,content):
         self.find_element(element_info).send_keys(content)
         log_pri.info(element_info['element_name']+'输入:'+content)
+
+
+
 

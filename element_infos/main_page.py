@@ -5,11 +5,12 @@ from element_infos.login_page import LoginPage
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from common.log_utils import log_pri
-
+from common.base_page import BasePage
 
 # logutils=LogUtils()
-class MainPage:
-    def __init__(self):
+class MainPage(BasePage):
+    def __init__(self,driver):
+        super(MainPage, self).__init__(driver)
         # self.logutils=logutils
         login_page = LoginPage()
         login_page.input_username('test01')
