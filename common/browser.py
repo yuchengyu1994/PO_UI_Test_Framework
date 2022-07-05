@@ -1,7 +1,6 @@
 import os
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-
 from common.config_utils import read_config
 
 current_path = os.path.dirname(__file__)

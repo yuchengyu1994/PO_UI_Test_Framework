@@ -1,8 +1,4 @@
-import os
-import time
-from common.log_utils import LogUtils
-from element_infos.login_page import LoginPage
-from selenium import webdriver
+from element_infos.login.login_page import LoginPage
 from selenium.webdriver.common.by import By
 from common.log_utils import log_pri
 from common.base_page import BasePage
