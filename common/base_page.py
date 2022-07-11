@@ -1,5 +1,7 @@
+import os
 import time
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from common.log_utils import log_pri
@@ -32,11 +34,63 @@ class BasePage:
         log_pri.info('获取网页标题，标题是%s'%value)
         return value
 
+    def get_url(self):
+        url=self.driver.current_url
+        log_pri.info('获取当前网页url，url是%s'%url)
+        return url
+
+    def get_text(self,element_info):
+        return self.find_element(element_info).text
+
+    def quit_driver(self):
+        self.driver.quit()
+        log_pri.info('退出浏览器')
+
+
+    def close_window(self):
+        self.driver.close
+        log_pri.info('退出当前窗口')
+
     def switch_to(self,element_info):
-        self.implicitly_wait(3)
         element=self.find_element(element_info)
         self.driver.switch_to.frame(element)
         log_pri.info('跳转到页面%s'%element_info['element_name'])
+#弹窗的操作封装
+    def switch_to_alert(self,action='accpet',time_out=read_config.time_out):
+        WebDriverWait(self.driver,time_out).until(EC.alert_is_present())
+        alert = self.driver.switch_to.alert
+        alert_text = alert.text
+        if action == 'accept':
+            alert.accept()
+        elif action == 'dismiss':
+            alert.dismiss()
+        return alert_text
+
+#浏览器多窗口操作封装
+    def get_current_window_handle(self): #获取当前浏览器窗口
+        now_handle=self.driver.current_window_handle
+        return now_handle
+
+    def get_all_window_handle(self): #获取所有浏览器窗口的句柄
+        windows_handle=self.driver.window_handles
+        return windows_handle
+
+    def swtich_to_window_by_title(self,title): #根据url 跳转到窗口
+        windows_handle=self.driver.window_handles
+        for window_handle in windows_handle:
+            self.driver.switch_to.window(window_handle)
+            if WebDriverWait(self.driver,read_config.time_out).until(EC.title_contains(title)):
+                break
+
+    def swtich_to_window_by_url(self,url):
+        windows_handle=self.driver.window_handles
+        for window_handle in windows_handle:
+            self.driver.switch_to.window(window_handle)
+            if WebDriverWait(self.driver,read_config.time_out).until(EC.url_contains(url)):
+                break
+
+    def swtich_to_window_by_handle(self,window_handle): #根据句柄，跳转到窗口
+        self.driver.switch_to.window(window_handle)
 
     def find_element(self,element_info):
         locator_type_name = element_info['locator_type']
@@ -91,6 +145,26 @@ class BasePage:
     def implicitly_wait(self,seconds=read_config.time_out):
         self.driver.implicitly_wait(seconds)
         log_pri.info('设置隐式等待%s秒'%seconds)
+
+    #鼠标键盘操作
+    def move_to_element_by_mouse(self,element_info):
+        element=self.find_element(element_info)
+        ActionChains(self.driver).move_to_element(element).perform()
+
+    def long_press_element(self,element_info,seconds):
+        element=self.find_element(element_info)
+        ActionChains(self.driver).click_and_hold(element).pause(seconds).release(element).perform()
+
+#截图操作
+    def screenshot_as_file(self,*screenshot_path):
+        current_dir = os.path.dirname(__file__)
+        if len(screenshot_path) == 0:
+            screenshot_filepath = read_config.screenshot_path
+        else:
+            screenshot_filepath = screenshot_path[0]
+        now = time.strftime('%Y_%m_%d_%H_%M_%S')
+        screenshot_filepath = os.path.join(current_dir,'..',screenshot_filepath,'UITest_%s.png'%now)
+        self.driver.get_screenshot_as_file(screenshot_filepath)
 
 
 

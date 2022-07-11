@@ -41,6 +41,9 @@ class LoginPage(BasePage):
         # log_pri.info('点击登录按钮')
         super().click(self.login_button)
 
+    def get_login_fail_alert_content(self):
+        return self.switch_to_alert()
+
     # def clik_forgetpassword_link(self):
     #     self.forgetpassword_link.click()
     #     log_pri.info('点击忘记密码')
@@ -54,7 +57,8 @@ if __name__ == '__main__':
     login_page.input_username('test01')
     login_page.input_password('Aa2128199')
     login_page.click_login()
-
+    login_page.wait(1)
+    login_page.screenshot_as_file()
 
     # print(login_page.get_element_info('username_inputbox'))
     # login_page.clik_forgetpassword_link()

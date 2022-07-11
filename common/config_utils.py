@@ -29,6 +29,18 @@ class ConfigUtils:
     def time_out(self):
         return float(self.conf.get('default','time_out'))
 
+    @property
+    def screenshot_path(self):
+        return self.conf.get('default', 'screenshot_path')
+
+    @property
+    def get_username(self):
+        return self.conf.get('default', 'username')
+
+
+    @property
+    def get_password(self):
+        return self.conf.get('default', 'password')
 
 
 read_config=ConfigUtils()
