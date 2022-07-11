@@ -14,8 +14,11 @@ class BasePage:
 
     # 浏览器的操作封装
     def open_url(self, url):
-        self.driver.get(url)
-        log_pri.info('打开url地址%s' % url)
+        try:
+            self.driver.get(url)
+            log_pri.info('打开url地址%s' % url)
+        except Exception as e:
+            log_pri.error('不能打开指定的地址%s,原因是:%s'%(url,e.__str__()))
 
     def set_maxwindow(self):
         self.driver.maximize_window()
@@ -93,26 +96,39 @@ class BasePage:
         self.driver.switch_to.window(window_handle)
 
     def find_element(self,element_info):
-        locator_type_name = element_info['locator_type']
-        locator_value_info = element_info['locator_value']
-        locator_time = element_info['timeout']
-        if locator_type_name=='id':
-            locator_type = By.id
-        elif locator_type_name== 'class':
-            locator_type = By.id
-        elif locator_type_name== 'xpath':
-            locator_type = By.XPATH
-        # element = WebDriverWait(self.driver,locator_time)\
-        #     .until(lambda x:x.find_element(locator_type,locator_value_info))
-        element = WebDriverWait(self.driver, locator_time).\
-            until(EC.presence_of_element_located((locator_type,locator_value_info)))
-        log_pri.info('%s元素识别成功'%element_info['element_name'])
+        """
+        根据提供的元素数据，进行元素的查找
+        :param element_info: 元素信息参数，字典类型
+        :return:返回查找到的元素,element对象
+        """
+        try:
+            locator_type_name = element_info['locator_type']
+            locator_value_info = element_info['locator_value']
+            locator_time = element_info['timeout']
+            if locator_type_name=='id':
+                locator_type = By.id
+            elif locator_type_name== 'class':
+                locator_type = By.id
+            elif locator_type_name== 'xpath':
+                locator_type = By.XPATH
+            # element = WebDriverWait(self.driver,locator_time)\
+            #     .until(lambda x:x.find_element(locator_type,locator_value_info))
+            element = WebDriverWait(self.driver, locator_time).\
+                until(EC.presence_of_element_located((locator_type,locator_value_info)))
+            log_pri.info('%s元素识别成功'%element_info['element_name'])
+        except Exception as e:
+            log_pri.error('%s元素不能识别，原因是%s'%(element_info['element_name'],e.__str__()))
+            self.screenshot_as_file()
         return element
 
     def click(self,element_info):
         element=self.find_element(element_info)
-        element.click()
-        log_pri.info('对%s进行了点击'%element_info['element_name'])
+        try:
+            element.click()
+            log_pri.info('对%s进行了点击'%element_info['element_name'])
+        except Exception as e:
+            log_pri.error('%s元素点击失败，原因是：%s'%(element_info['element_name'],e.__str__()))
+            self.screenshot_as_file()
 
     def input(self,element_info,content):
         self.find_element(element_info).send_keys(content)
@@ -165,6 +181,7 @@ class BasePage:
         now = time.strftime('%Y_%m_%d_%H_%M_%S')
         screenshot_filepath = os.path.join(current_dir,'..',screenshot_filepath,'UITest_%s.png'%now)
         self.driver.get_screenshot_as_file(screenshot_filepath)
+        log_pri.info('截图，存放在地址%s'%screenshot_filepath)
 
 
 

@@ -26,6 +26,14 @@ class ConfigUtils:
         return self.conf.get('default','driver_name')
 
     @property
+    def get_log_path(self):
+        return self.conf.get('default', 'log_path')
+
+    @property
+    def get_log_level(self):
+        return int(self.conf.get('default', 'log_level'))
+
+    @property
     def time_out(self):
         return float(self.conf.get('default','time_out'))
 
@@ -51,4 +59,5 @@ if __name__=='__main__':
     print(read_config.driver_path)
     print(read_config.driver_name)
     print(read_config.time_out)
+    print(read_config.get_log_level)
 
