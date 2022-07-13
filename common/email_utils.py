@@ -1,3 +1,8 @@
+#!/usr/bin/env python
+# encoding: utf-8
+# @author:Yuchengyu
+# @time: 2022/7/13 0013 15:27
+
 import os
 import smtplib
 from email import encoders
@@ -5,15 +10,13 @@ from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-current_path = os.path.dirname(__file__)
-smtp_file_path = os.path.join(current_path, '..', 'reports/禅道自动化测试报告V1.1/')
 class EmailUtils:
     def __init__(self,smtp_subject,smtp_body,smtp_file_path=None):
         self.smtp_server = 'smtp.163.com'
         self.smtp_sender = '15575953724@163.com'
         self.smtp_senderpassword = 'ZJHYNLTAMEFWYCUE'
-        self.smtp_receiver = '505697990@qq.com,15575953724@163.com,519834579@qq.com'
-        self.smtp_cc = ''
+        self.smtp_receiver = '15575953724@163.com,519834579@qq.com'
+        self.smtp_cc = '505697990@qq.com'
         self.smtp_subject=smtp_subject
         self.smtp_body=smtp_body
         self.smtp_file=smtp_file_path
@@ -22,8 +25,8 @@ class EmailUtils:
         if self.smtp_file !=None:
             msg = MIMEMultipart()
             with open(self.smtp_file,'rb') as f:
-                mime = MIMEBase('zip','zip',filename=self.smtp_file.split('/')[-1])
-                mime.add_header('Content-Disposition','attachment',filename=('gb2312','',self.smtp_file.split('/')[-1]))
+                mime = MIMEBase('zip','zip',filename=self.smtp_file.split('\\')[-1])
+                mime.add_header('Content-Disposition','attachment',filename=('gb2312','',self.smtp_file.split('\\')[-1]))
                 mime.add_header('Content-ID','<0>')
                 mime.add_header('X-Attachment-Id','0')
                 mime.set_payload(f.read())
@@ -57,3 +60,4 @@ class EmailUtils:
         except Exception as e:
             print('发送失败')
         smtp.quit()
+
