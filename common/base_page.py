@@ -6,6 +6,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from common.log_utils import log_pri
 from common.config_utils import read_config
+from common import HTMLTestReportCN
 
 
 class BasePage:
@@ -43,7 +44,9 @@ class BasePage:
         return url
 
     def get_text(self,element_info):
+        log_pri.info('获取当前元素中的text')
         return self.find_element(element_info).text
+
 
     def quit_driver(self):
         self.driver.quit()
@@ -51,7 +54,7 @@ class BasePage:
 
 
     def close_window(self):
-        self.driver.close
+        self.driver.close()
         log_pri.info('退出当前窗口')
 
     def switch_to(self,element_info):
@@ -172,7 +175,7 @@ class BasePage:
         ActionChains(self.driver).click_and_hold(element).pause(seconds).release(element).perform()
 
 #截图操作
-    def screenshot_as_file(self,*screenshot_path):
+    def screenshot_as_file_old(self,*screenshot_path):
         current_dir = os.path.dirname(__file__)
         if len(screenshot_path) == 0:
             screenshot_filepath = read_config.screenshot_path
@@ -183,7 +186,11 @@ class BasePage:
         self.driver.get_screenshot_as_file(screenshot_filepath)
         log_pri.info('截图，存放在地址%s'%screenshot_filepath)
 
-
+    def screenshot_as_file(self):
+        report_path = os.path.join(os.path.dirname(__file__),'..',read_config.get_report_path)
+        report_dir = HTMLTestReportCN.ReportDirectory(report_path)
+        report_dir.get_screenshot(self.driver)
+        log_pri.info('截图，存放在地址%s'%report_path)
 
 
 

@@ -50,6 +50,18 @@ class ConfigUtils:
     def get_password(self):
         return self.conf.get('default', 'password')
 
+    @property
+    def get_test_datas_path(self):
+        return self.conf.get('default', 'test_datas_path')
+
+    @property
+    def get_case_path(self):
+        return self.conf.get('default', 'case_path')
+
+    @property
+    def get_report_path(self):
+        return self.conf.get('default', 'report_path')
+
 
 read_config=ConfigUtils()
 
@@ -60,4 +72,4 @@ if __name__=='__main__':
     print(read_config.driver_name)
     print(read_config.time_out)
     print(read_config.get_log_level)
-
+    print(read_config.get_test_datas_path)

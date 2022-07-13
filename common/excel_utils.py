@@ -44,3 +44,11 @@ class ExcelUtils:
                 row_excel_data.append(cell_value)
             all_excel_data.append(row_excel_data)
         return all_excel_data
+
+
+if __name__ == '__main__':
+    current_path = os.path.dirname(__file__)
+    dir_path = os.path.join(current_path, '..', read_config.get_test_datas_path)
+    excel_utils=ExcelUtils(dir_path,sheet_name='login_suite')
+    all_excel_datas=excel_utils.get_sheet_data_by_list()
+    print(all_excel_datas)
