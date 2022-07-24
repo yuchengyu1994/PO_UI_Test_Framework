@@ -62,14 +62,33 @@ class ConfigUtils:
     def get_report_path(self):
         return self.conf.get('default', 'report_path')
 
+    @property
+    def get_smtp_server(self):
+        return self.conf.get('emali', 'smtp_server')
+
+    @property
+    def get_smtp_sender(self):
+        return self.conf.get('emali', 'smtp_sender')
+
+    @property
+    def get_smtp_senderpassword(self):
+        return self.conf.get('emali', 'smtp_senderpassword')
+
+    @property
+    def get_smtp_receiver(self):
+        return self.conf.get('emali', 'smtp_receiver')
+
+    @property
+    def get_smtp_cc(self):
+        return self.conf.get('emali', 'smtp_cc')
 
 read_config=ConfigUtils()
 
 if __name__=='__main__':
     read_config = ConfigUtils()
-    print(read_config.get_url)
-    print(read_config.driver_path)
-    print(read_config.driver_name)
-    print(read_config.time_out)
-    print(read_config.get_log_level)
-    print(read_config.get_test_datas_path)
+    print(read_config.get_smtp_server)
+    print(read_config.get_smtp_sender)
+    print(read_config.get_smtp_senderpassword)
+    print(read_config.get_smtp_receiver)
+    print(read_config.get_smtp_cc)
+

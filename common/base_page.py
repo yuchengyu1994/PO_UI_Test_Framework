@@ -82,8 +82,8 @@ class BasePage:
         return windows_handle
 
     def swtich_to_window_by_title(self,title): #根据url 跳转到窗口
-        windows_handle=self.driver.window_handles
-        for window_handle in windows_handle:
+        windows_handles=self.get_all_window_handle
+        for window_handle in windows_handles:
             self.driver.switch_to.window(window_handle)
             if WebDriverWait(self.driver,read_config.time_out).until(EC.title_contains(title)):
                 break

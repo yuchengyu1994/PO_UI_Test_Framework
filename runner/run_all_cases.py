@@ -7,8 +7,6 @@ import unittest
 from  common import HTMLTestReportCN
 from common.config_utils import read_config
 from common.email_utils import EmailUtils
-from common import zip_utils
-
 
 current_path=os.path.dirname(__file__)
 report_path=os.path.join(current_path,'..',read_config.get_report_path)
@@ -42,8 +40,5 @@ class RunAllCases:
 
 if __name__ == '__main__':
     dir_path=RunAllCases().run()
-    zip_path=os.path.join(dir_path,'..','自动化测试报告.zip')
-    zip_utils.zip_utils(dir_path,zip_path)
-    print(zip_path)
-    email_utils = EmailUtils('自动化测试报告','来自python邮件自动发送测试',smtp_file_path=zip_path)
-    email_utils.send_mail()
+    email_utils = EmailUtils('自动化测试报告','来自python邮件自动发送测试',smtp_file_path=dir_path)
+    email_utils.zip_send_mail()
